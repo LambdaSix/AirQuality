@@ -29,6 +29,7 @@
   <ItemGroup>
     <Compile Include="AirQuality.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AQAir.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
