@@ -33,7 +33,8 @@
     <Compile Include="AQGasResourceExchange.cs" />
     <Compile Include="AQGas.cs" />
     <Compile Include="AQReaction.cs" />
-    <Compile Include="AQReagents.cs" />
+    <Compile Include="AQGasReagent.cs" />
+    <Compile Include="AQResourceReagent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
@@ -47,6 +48,7 @@
     <None Include="AQResources.cfg" />
     <None Include="AQReactions.cfg" />
     <None Include="AQsettings.cfg" />
+    <None Include="AirQuality.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
