@@ -27,14 +27,18 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AirQuality.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AQAir.cs" />
-    <Compile Include="AQGasResourceExchange.cs" />
     <Compile Include="AQGas.cs" />
     <Compile Include="AQReaction.cs" />
     <Compile Include="AQGasReagent.cs" />
     <Compile Include="AQResourceReagent.cs" />
+    <Compile Include="AQConventions.cs" />
+    <Compile Include="AQPhysicalConstants.cs" />
+    <Compile Include="Interfaces.cs" />
+    <Compile Include="ModuleAQGasResourceExchange.cs" />
+    <Compile Include="ModuleAQHabitableVolume.cs" />
+    <Compile Include="AQSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">

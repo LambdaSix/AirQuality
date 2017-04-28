@@ -20,7 +20,7 @@ namespace AirQuality
 			foreach (AQReaction reaction in Reactions)
 			{
 				print("[AQ:GRE] Evaluating Reaction " + reaction.Name);
-				limitingreagent = reaction.CalculateLimit(ScaleFactor, LivingVolume, Air, vessel);
+				limitingreagent = reaction.CalculateLimit(ScaleFactor, LivingVolume, Air, vessel, part.protoModuleCrew.Count);
 				if (limitingreagent.Value - 1.0f < float.Epsilon)
 				{
 					print("[AQ:GRE] reaction " + reaction.Name + " is not limited");
@@ -30,10 +30,10 @@ namespace AirQuality
 					print("[AQ:GRE] reaction " + reaction.Name + " is limited by reagent " + limitingreagent.Key + " to scale of " + limitingreagent.Value);
 				}
 				print("[AQ:GRE] reaction " + reaction.Name + " updating resources");
-				reaction.UpdateResources(part, ScaleFactor); 
+				reaction.UpdateResources(part, ScaleFactor, part.protoModuleCrew.Count); 
 				print("[AQ:GRE] finished updating resources, limiting factor " + limitingreagent.Value);
 				print("[AQ:GRE] reaction " + reaction.Name + " updating AQGases");
-				reaction.UpdateAir(Air, LivingVolume,ScaleFactor);
+				reaction.UpdateAir(Air, LivingVolume,ScaleFactor, part.protoModuleCrew.Count);
 				print("[AQ:GRE] Finished simulating " + reaction.Name);
 			}
 			return;
@@ -146,9 +146,9 @@ namespace AirQuality
 					print("[AQ:GRE]     AlwaysActive:" + reaction.AlwaysActive);
 					print("[AQ:GRE]             Type:" + reaction.Type);
 					print("[AQ:GRE] Listing AQGas reagents of " + reaction.Name);
-					if (reaction.GasReagents.Count == 0)
+					if ((reaction.GasReagents == null) || (reaction.GasReagents.Count == 0))
 					{
-						print("[AQ:GRE] Reaction" + reaction.Name + " has no AQGasReagents defined");
+						print("[AQ:GRE] Reaction " + reaction.Name + " has no AQGasReagents defined");
 					}
 					foreach (AQGasReagent gasreagentiterator in reaction.GasReagents)
 					{
@@ -157,9 +157,9 @@ namespace AirQuality
 						print("[AQ:GRE]               Production:" + gasreagentiterator.Production);
 					}
 					print("[AQ:GRE] Listing resource reagents of " + reaction.Name);
-					if (reaction.GasReagents.Count == 0)
+					    if ((reaction.ResourceReagents == null) || (reaction.ResourceReagents.Count == 0)) 
 					{
-						print("[AQ:GRE] Reaction" + reaction.Name + " has no resource reagents defined");
+						print("[AQ:GRE] Reaction " + reaction.Name + " has no resource reagents defined");
 					}
 					foreach (AQResourceReagent resourcereagentiterator in reaction.ResourceReagents)
 					{
@@ -174,8 +174,8 @@ namespace AirQuality
 			{
 				double ScaleFactor = Math.Min(((Planetarium.GetUniversalTime() - LastUpdate) / InstanceAQSettings.SimulationStep), InstanceAQSettings.MaxScaleFactor);
 				LastUpdate+= ScaleFactor* InstanceAQSettings.SimulationStep;
-				print("[AQ:GRE] Updating Air of " + part.Modules.OfType<HabitableVolume>().Single().Air.Count + " gases");
-				UpdateAll(vessel, part.Modules.OfType<HabitableVolume>().Single().Air, part.Modules.OfType<HabitableVolume>().Single().LivingVolume, ScaleFactor);
+				print("[AQ:GRE] Updating Air of " + part.Modules.OfType<ModuleAQHabitableVolume>().Single().Air.Count + " gases");
+				UpdateAll(vessel, part.Modules.OfType<ModuleAQHabitableVolume>().Single().Air, part.Modules.OfType<ModuleAQHabitableVolume>().Single().LivingVolume, ScaleFactor);
 			}
 			base.OnUpdate();
 		}
