@@ -21,7 +21,7 @@ namespace AirQuality
 			{
 				print("[AQ:GRE] Evaluating Reaction " + reaction.Name);
 				limitingreagent = reaction.CalculateLimit(ScaleFactor, LivingVolume, Air, vessel, part.protoModuleCrew.Count);
-				if (limitingreagent.Value - 1.0f < float.Epsilon)
+				if (limitingreagent.Value - AQConventions.one < float.Epsilon)
 				{
 					print("[AQ:GRE] reaction " + reaction.Name + " is not limited");
 				}
@@ -62,17 +62,17 @@ namespace AirQuality
 				print("[AQ:GRE] Loading aqsettings from " + inode);
 				InstanceAQSettings.Load(inode);
 			}
-			if (node.HasValue("Descrition"))
+			if (node.HasValue(AQConventions.Values.Description))
 			{
-				Description = node.GetValue("Description");
+				Description = node.GetValue(AQConventions.Values.Description);
 			}
-			if (node.HasNode("AQReactions"))
+			if (node.HasNode(AQConventions.Values.AQReactions))
 			{
 				print("[AQ:GRE] Loading reactions for " + Description);
 				Reactions = new List<AQReaction>();
-				foreach (ConfigNode reactionnode in node.GetNode("AQReactions").GetNodes())
+				foreach (ConfigNode reactionnode in node.GetNode(AQConventions.Values.AQReactions).GetNodes())
 				{
-					print("[AQ:GRE] discovered " + node.GetNode("AQReactions").GetNodes().Count() + " reactions");
+					print("[AQ:GRE] discovered " + node.GetNode(AQConventions.Values.AQReactions).GetNodes().Count() + " reactions");
 					reactionloader = new AQReaction();
 					print("[AQ:GRE] Loading volatile properties from " + reactionnode);
 					reactionloader.Load(reactionnode);
@@ -95,23 +95,23 @@ namespace AirQuality
 		{
 			ConfigNode inode;
 			print("[AQ:GRE] OnSave: " + node);
-			if (node.HasValue("Description"))
+			if (node.HasValue(AQConventions.Values.Description))
 			{
-				node.SetValue("Description", Description);
+				node.SetValue(AQConventions.Values.Description, Description);
 			}
 			else
 			{
-				node.AddValue("Description", Description);
+				node.AddValue(AQConventions.Values.Description, Description);
 			}
-			if (node.HasNode("AQReactions"))
+			if (node.HasNode(AQConventions.Values.AQReactions))
 			{
 				print("[AQ:GRE] Saving to existing AQReaction node");
-				inode = node.GetNode("AQReactions");
+				inode = node.GetNode(AQConventions.Values.AQReactions);
 			}
 			else
 			{
 				print("[AQ:GRE] Creating AQReactions node");
-				inode = node.AddNode("AQReactions");
+				inode = node.AddNode(AQConventions.Values.AQReactions);
 			}
 			print("[AQ:GRE] Saving " + Reactions.Count + " reactions");
 			foreach (AQReaction reaction in Reactions)
@@ -130,11 +130,11 @@ namespace AirQuality
 		}
 		public override void OnUpdate()
 		{
-			if (Time.timeSinceLevelLoad < 1.0f || !FlightGlobals.ready)
+			if (Time.timeSinceLevelLoad < AQConventions.one || !FlightGlobals.ready)
 			{
 				return;
 			}
-			if (LastUpdate == 0.0f)         //exact float point comparison is done intentionally to catch the case of uninitialized variable
+			if (LastUpdate == AQConventions.floatzero)         //exact float point comparison is done intentionally to catch the case of uninitialized variable
 			{
 				// Just started running
 				LastUpdate = Planetarium.GetUniversalTime();
@@ -146,7 +146,7 @@ namespace AirQuality
 					print("[AQ:GRE]     AlwaysActive:" + reaction.AlwaysActive);
 					print("[AQ:GRE]             Type:" + reaction.Type);
 					print("[AQ:GRE] Listing AQGas reagents of " + reaction.Name);
-					if ((reaction.GasReagents == null) || (reaction.GasReagents.Count == 0))
+					if ((reaction.GasReagents == null) || (reaction.GasReagents.Count == AQConventions.intzero))
 					{
 						print("[AQ:GRE] Reaction " + reaction.Name + " has no AQGasReagents defined");
 					}
@@ -157,7 +157,7 @@ namespace AirQuality
 						print("[AQ:GRE]               Production:" + gasreagentiterator.Production);
 					}
 					print("[AQ:GRE] Listing resource reagents of " + reaction.Name);
-					    if ((reaction.ResourceReagents == null) || (reaction.ResourceReagents.Count == 0)) 
+					if ((reaction.ResourceReagents == null) || (reaction.ResourceReagents.Count == AQConventions.intzero)) 
 					{
 						print("[AQ:GRE] Reaction " + reaction.Name + " has no resource reagents defined");
 					}
